@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 import tornado.gen
 from bson import json_util
-from views import mixins
+from handlers import mixins
 
 
 class UserDetailHandler(mixins.JsonRequestHandler,

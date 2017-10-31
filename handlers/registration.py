@@ -3,7 +3,7 @@ from http import HTTPStatus
 
 import utils.auth
 import tornado.gen
-from views import mixins
+from handlers import mixins
 from forms.registration import RegistrationForm
 
 

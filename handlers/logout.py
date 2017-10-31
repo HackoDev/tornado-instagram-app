@@ -1,5 +1,5 @@
 import tornado.gen
-from views import mixins
+from handlers import mixins
 
 
 class LogoutHandler(mixins.JsonRequestHandler,

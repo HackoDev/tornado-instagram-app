@@ -3,7 +3,7 @@ import datetime
 from http import HTTPStatus
 
 import tornado.gen
-from views import mixins
+from handlers import mixins
 from forms.token import TokenForm
 
 

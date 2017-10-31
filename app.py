@@ -2,13 +2,13 @@ import motor
 import tornado.web
 import tornado.ioloop
 
-from views.login import LoginHandler
-from views.logout import LogoutHandler
-from views.handshake import HandshakeHandler
-from views.user_detail import UserDetailHandler
-from views.registration import RegistrationHandler
-from views.user_sessions import UserSessionsHandler
-from views.instagram_auth import InstagramAuthHandler
+from handlers.login import LoginHandler
+from handlers.logout import LogoutHandler
+from handlers.handshake import HandshakeHandler
+from handlers.user_detail import UserDetailHandler
+from handlers.registration import RegistrationHandler
+from handlers.user_sessions import UserSessionsHandler
+from handlers.instagram_auth import InstagramAuthHandler
 
 
 def make_app():

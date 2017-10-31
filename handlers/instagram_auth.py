@@ -4,7 +4,7 @@ from http import HTTPStatus
 from concurrent.futures import ThreadPoolExecutor
 
 import tornado.gen
-from views import mixins
+from handlers import mixins
 from instagram import client
 from tornado.process import cpu_count
 from instagram.oauth2 import OAuth2AuthExchangeError

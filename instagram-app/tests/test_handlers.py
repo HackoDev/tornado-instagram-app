@@ -1,8 +1,7 @@
 import json
-from tornado.testing import AsyncHTTPTestCase
 
 from app import make_app
-
+from tornado.testing import AsyncHTTPTestCase
 
 app = make_app()
 

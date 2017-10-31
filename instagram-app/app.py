@@ -1,8 +1,7 @@
 import motor
+import handlers
 import tornado.web
 import tornado.ioloop
-
-import handlers
 
 
 def make_app():

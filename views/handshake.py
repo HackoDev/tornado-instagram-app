@@ -7,8 +7,8 @@ from views import mixins
 from forms.token import TokenForm
 
 
-class TokenCreateHandler(mixins.JsonRequestHandler,
-                         mixins.AuthTokenRequiredMixin):
+class HandshakeHandler(mixins.JsonRequestHandler,
+                       mixins.AuthTokenRequiredMixin):
 
     REQUIRED = False
 

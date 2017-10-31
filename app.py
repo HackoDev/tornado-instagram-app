@@ -1,12 +1,11 @@
-import logging
-
 import motor
 import tornado.web
 import tornado.ioloop
+
 from views.login import LoginHandler
 from views.logout import LogoutHandler
+from views.handshake import HandshakeHandler
 from views.user_detail import UserDetailHandler
-from views.authenticate import TokenCreateHandler
 from views.registration import RegistrationHandler
 from views.user_sessions import UserSessionsHandler
 from views.instagram_auth import InstagramAuthHandler
@@ -15,7 +14,7 @@ from views.instagram_auth import InstagramAuthHandler
 def make_app():
     client = motor.MotorClient()
     url_handlers = [
-        tornado.web.URLSpec(r"^/api/handshake$", TokenCreateHandler,
+        tornado.web.URLSpec(r"^/api/handshake$", HandshakeHandler,
                             name="handshake"),
         tornado.web.URLSpec(r"^/api/login$", LoginHandler, name="login"),
         tornado.web.URLSpec(r"^/api/logout$", LogoutHandler, name="logout"),

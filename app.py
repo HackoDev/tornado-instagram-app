@@ -2,28 +2,27 @@ import motor
 import tornado.web
 import tornado.ioloop
 
-from handlers.login import LoginHandler
-from handlers.logout import LogoutHandler
-from handlers.handshake import HandshakeHandler
-from handlers.user_detail import UserDetailHandler
-from handlers.registration import RegistrationHandler
-from handlers.user_sessions import UserSessionsHandler
-from handlers.instagram_auth import InstagramAuthHandler
+import handlers
 
 
 def make_app():
     client = motor.MotorClient()
     url_handlers = [
-        tornado.web.URLSpec(r"^/api/handshake$", HandshakeHandler,
+        tornado.web.URLSpec(r"^/api/handshake$", handlers.HandshakeHandler,
                             name="handshake"),
-        tornado.web.URLSpec(r"^/api/login$", LoginHandler, name="login"),
-        tornado.web.URLSpec(r"^/api/logout$", LogoutHandler, name="logout"),
-        tornado.web.URLSpec(r"^/api/registration$", RegistrationHandler,
+        tornado.web.URLSpec(r"^/api/login$", handlers.LoginHandler,
+                            name="login"),
+        tornado.web.URLSpec(r"^/api/logout$", handlers.LogoutHandler,
+                            name="logout"),
+        tornado.web.URLSpec(r"^/api/registration$",
+                            handlers.RegistrationHandler,
                             name="registration"),
-        tornado.web.URLSpec(r"^/api/me$", UserDetailHandler, name="me-info"),
-        tornado.web.URLSpec(r"^/api/me/sessions$", UserSessionsHandler,
-                            name="me-sessions"),
-        tornado.web.URLSpec(r"^/api/instagram_auth/$", InstagramAuthHandler,
+        tornado.web.URLSpec(r"^/api/me$", handlers.UserDetailHandler,
+                            name="me-info"),
+        tornado.web.URLSpec(r"^/api/me/sessions$",
+                            handlers.UserSessionsHandler, name="me-sessions"),
+        tornado.web.URLSpec(r"^/api/instagram_auth/$",
+                            handlers.InstagramAuthHandler,
                             name="instagram-auth")
     ]
     return tornado.web.Application(

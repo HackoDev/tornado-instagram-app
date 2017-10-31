@@ -1,7 +1,8 @@
 from concurrent.futures import ThreadPoolExecutor
-from tornado.process import cpu_count
+
 import bcrypt
 import tornado.gen
+from tornado.process import cpu_count
 
 pool = ThreadPoolExecutor(cpu_count())
 

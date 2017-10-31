@@ -1,3 +1,4 @@
+import logging
 import motor
 import tornado.web
 import tornado.ioloop
@@ -45,4 +46,5 @@ def make_app():
 if __name__ == "__main__":
     app = make_app()
     app.listen(8888)
+    print("Server running on {port} port".format(port=8888))
     tornado.ioloop.IOLoop.current().start()

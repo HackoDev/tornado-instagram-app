@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-import utils
+import utils.auth
 import tornado.gen
 from views import mixins
 from forms.login import LoginForm
@@ -35,7 +35,7 @@ class LoginHandler(mixins.JsonRequestHandler, mixins.AuthTokenRequiredMixin):
                         message=self.INVALID_CREDENTIALS
                     )
                 else:
-                    if (yield utils.check_password(
+                    if (yield utils.auth.check_password(
                         credentials['password'],
                         user['password'].decode()
                     )):

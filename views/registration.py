@@ -1,7 +1,7 @@
 import datetime
 from http import HTTPStatus
 
-import utils
+import utils.auth
 import tornado.gen
 from views import mixins
 from forms.registration import RegistrationForm
@@ -35,7 +35,7 @@ class RegistrationHandler(mixins.JsonRequestHandler,
                 )
             else:
                 user_info = form.data
-                hashed_password = yield utils.make_password(
+                hashed_password = yield utils.auth.make_password(
                     user_info['password']
                 )
                 user_info.update({

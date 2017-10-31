@@ -3,8 +3,6 @@ import datetime
 from http import HTTPStatus
 
 import tornado.gen
-from utils import make_password
-from utils import check_password
 from views import mixins
 from forms.token import TokenForm
 

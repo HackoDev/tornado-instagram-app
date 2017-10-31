@@ -15,10 +15,10 @@ from views.instagram_auth import InstagramAuthHandler
 def make_app():
     client = motor.MotorClient()
     url_handlers = [
-        tornado.web.URLSpec(r"/api/handshake", TokenCreateHandler,
+        tornado.web.URLSpec(r"/api/handshake$", TokenCreateHandler,
                             name="handshake"),
         tornado.web.URLSpec(r"^/api/login$", LoginHandler, name="login"),
-        tornado.web.URLSpec(r"^/api/logout", LogoutHandler, name="logout"),
+        tornado.web.URLSpec(r"^/api/logout$", LogoutHandler, name="logout"),
         tornado.web.URLSpec(r"^/api/registration$", RegistrationHandler,
                             name="registration"),
         tornado.web.URLSpec(r"^/api/me$", UserDetailHandler, name="me-info"),

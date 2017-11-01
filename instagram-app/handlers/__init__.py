@@ -5,3 +5,5 @@ from .logout import LogoutHandler
 from .registration import RegistrationHandler
 from .user_detail import UserDetailHandler
 from .user_sessions import UserSessionsHandler
+from .select_account import SelectAccountHandler
+from .instagram_user_search import UserSearchHandler

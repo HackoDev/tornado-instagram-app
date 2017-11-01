@@ -2,41 +2,65 @@ import motor
 import handlers
 import tornado.web
 import tornado.ioloop
+from instagram import client
+
+
+class Application(tornado.web.Application):
+
+    def __init__(self, *args, **kwargs):
+        super(Application, self).__init__(*args, **kwargs)
+        self.instagram_client = self.get_instagram_client()
+
+    def get_instagram_client(self, **kwargs) -> client.InstagramAPI:
+        config = {
+            'client_id': self.settings['instagram_conf']['client_id'],
+            'client_secret': self.settings['instagram_conf']['client_secret'],
+            'redirect_uri': self.settings['instagram_conf']['redirect_uri']
+        }
+        config.update(kwargs)
+        return client.InstagramAPI(
+            **config
+        )
 
 
 def make_app():
     client = motor.MotorClient()
     url_handlers = [
         tornado.web.URLSpec(r"^/api/handshake$", handlers.HandshakeHandler,
-                            name="handshake"),
+                            name='handshake'),
         tornado.web.URLSpec(r"^/api/login$", handlers.LoginHandler,
-                            name="login"),
+                            name='login'),
         tornado.web.URLSpec(r"^/api/logout$", handlers.LogoutHandler,
-                            name="logout"),
+                            name='logout'),
         tornado.web.URLSpec(r"^/api/registration$",
                             handlers.RegistrationHandler,
-                            name="registration"),
+                            name='registration'),
         tornado.web.URLSpec(r"^/api/me$", handlers.UserDetailHandler,
-                            name="me-info"),
+                            name='me-info'),
         tornado.web.URLSpec(r"^/api/me/sessions$",
                             handlers.UserSessionsHandler, name="me-sessions"),
+        tornado.web.URLSpec(r"^/api/accounts/select$",
+                            handlers.SelectAccountHandler,
+                            name='select-account'),
+        tornado.web.URLSpec(r"^/api/users/search",
+                            handlers.UserSearchHandler,
+                            name='search-users'),
         tornado.web.URLSpec(r"^/api/instagram_auth/$",
                             handlers.InstagramAuthHandler,
-                            name="instagram-auth")
+                            name='instagram-auth')
     ]
-    return tornado.web.Application(
+
+    return Application(
         handlers=url_handlers,
         debug=True,
         autoreload=True,
         db=client.test,
         page_size=10,
         auth_header_name='X-Authorization',
-        instagram_config={
-            'credentials': (
-                'c601592a3b13456a94fbd66d44e97a7a',
-                '8e9828a8001842f1b7392616915ff101'
-            ),
-            'redirect_uri': 'http://localhost:8888/instagram_auth/'
+        instagram_conf={
+            'client_id': 'c601592a3b13456a94fbd66d44e97a7a',
+            'client_secret': '8e9828a8001842f1b7392616915ff101',
+            'redirect_uri': 'http://localhost:8888/api/instagram_auth/'
         }
     )
 

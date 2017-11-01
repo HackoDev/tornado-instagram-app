@@ -19,7 +19,7 @@ class UserDetailHandler(mixins.JsonRequestHandler,
             user = yield self.settings['db'].users.find_one({
                 '_id': self.request.auth_token.get('user')
             }, {
-                'username': 1, '_id': 0
+                'username': 1, '_id': 0, 'accounts': 1
             })
             self.write(json.dumps(user, default=json_util.default))
         else:

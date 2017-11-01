@@ -5,7 +5,6 @@ from concurrent.futures import ThreadPoolExecutor
 
 import tornado.gen
 from handlers import mixins
-from instagram import client
 from tornado.process import cpu_count
 from instagram.oauth2 import OAuth2AuthExchangeError
 
@@ -19,17 +18,12 @@ class InstagramAuthHandler(mixins.JsonRequestHandler,
 
     @tornado.gen.coroutine
     def get(self):
-
-        credentials = dict(zip(
-            ('client_id', 'client_secret'),
-            self.settings['instagram_config']['credentials']
-        ))
         uri = 'http://{hostname}{path}?auth_token={auth_token}'.format(
             hostname=self.request.headers.get('Host'),
             path=self.reverse_url('instagram-auth'),
             auth_token=self.request.auth_token['key']
         )
-        i_client = client.InstagramAPI(**credentials, redirect_uri=uri)
+        i_client = self.application.get_instagram_client(redirect_uri=uri)
 
         code = self.get_argument('code', None, True)
         if code:
@@ -99,5 +93,7 @@ class InstagramAuthHandler(mixins.JsonRequestHandler,
                 })
         else:
             self.write({
-                'login_url': i_client.get_authorize_url()
+                'login_url': i_client.get_authorize_url(
+                    scope=["likes", "comments", 'public_content']
+                )
             })

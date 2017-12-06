@@ -22,8 +22,9 @@ class UserDetailHandler(mixins.JsonRequestHandler,
                 'username': 1, '_id': 0, 'accounts': 1
             })
             self.write(json.dumps(user, default=json_util.default))
-        else:
-            self.write_error(
-                HTTPStatus.UNAUTHORIZED,
-                message=self.default_errors['unauthorized']
-            )
+            return None
+
+        self.write_error(
+            HTTPStatus.UNAUTHORIZED,
+            message=self.default_errors['unauthorized']
+        )

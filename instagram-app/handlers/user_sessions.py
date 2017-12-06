@@ -29,8 +29,9 @@ class UserSessionsHandler(mixins.JsonRequestHandler,
                 obj = cursor.next_object()
                 items.append(obj)
             self.write(json.dumps(items, default=json_util.default))
-        else:
-            self.write_error(
-                HTTPStatus.UNAUTHORIZED,
-                message=self.default_errors['unauthorized']
-            )
+            return None
+
+        self.write_error(
+            HTTPStatus.UNAUTHORIZED,
+            message=self.default_errors['unauthorized']
+        )

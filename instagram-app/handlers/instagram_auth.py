@@ -59,41 +59,41 @@ class InstagramAuthHandler(mixins.JsonRequestHandler,
                     self.write({
                         'detail': 'You successfully logged'
                     })
-            else:
-                if user_relation:
+                return None
+            if user_relation:
 
-                    yield self.settings['db'].users.update({
-                        'accounts.username': inst_profile['username']},
-                        {'$set': {
-                            'accounts.$': inst_profile
-                        }}
-                    )
-                    yield self.settings['db'].tokens.update({
-                        'key': session['key']
-                    }, {
-                        '$set': {
-                            'user': user_relation['_id']
-                        }}
-                    )
-                else:
-                    inserted = yield self.settings['db'].users.insert_one({
-                        'username': inst_profile['username'],
-                        'accounts': [inst_profile],
-                        'joined_at': datetime.datetime.utcnow()
-                    }, {
-                        'writeConcern': {'w': 'majority', 'wtimeout': 100}
-                    })
-                    yield self.settings['db'].tokens.update({
-                        'key': session['key']
-                    }, {'$set': {
-                        'user': inserted.inserted_id}}
-                    )
-                self.write({
-                    'detail': 'You successfully logged'
-                })
-        else:
-            self.write({
-                'login_url': i_client.get_authorize_url(
-                    scope=["likes", "comments", 'public_content']
+                yield self.settings['db'].users.update({
+                    'accounts.username': inst_profile['username']},
+                    {'$set': {
+                        'accounts.$': inst_profile
+                    }}
                 )
+                yield self.settings['db'].tokens.update({
+                    'key': session['key']
+                }, {
+                    '$set': {
+                        'user': user_relation['_id']
+                    }}
+                )
+                return None
+            inserted = yield self.settings['db'].users.insert_one({
+                'username': inst_profile['username'],
+                'accounts': [inst_profile],
+                'joined_at': datetime.datetime.utcnow()
+            }, {
+                'writeConcern': {'w': 'majority', 'wtimeout': 100}
             })
+            yield self.settings['db'].tokens.update({
+                'key': session['key']
+            }, {'$set': {
+                'user': inserted.inserted_id}}
+            )
+            self.write({
+                'detail': 'You successfully logged'
+            })
+            return None
+        self.write({
+            'login_url': i_client.get_authorize_url(
+                scope=["likes", "comments", 'public_content']
+            )
+        })

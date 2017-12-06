@@ -20,35 +20,40 @@ class SelectAccountHandler(mixins.JsonRequestHandler,
                 HTTPStatus.UNAUTHORIZED,
                 message=self.default_errors['unauthorized']
             )
+            return None
         username = self.get_argument('username', None, True)
         if not username:
             self.write_error(
                 HTTPStatus.BAD_REQUEST,
                 message=self.default_errors['bad_account']
             )
-        elif auth_token.get('session') and \
+            return None
+
+        if auth_token.get('session') and \
             auth_token['session']['username'] == username:
             self.write({
                 'detail': 'You already using this account'
             })
+            return None
+
+        user = yield \
+            self.settings['db'].users.find_one({'_id': auth_token['user']})
+        for item in user['accounts']:
+            if item['username'] == username:
+                yield self.settings['db'].tokens.update({
+                    'key': auth_token['key']
+                }, {
+                    '$set': {
+                        'session': item
+                    }
+                })
+                break
         else:
-            user = yield \
-                self.settings['db'].users.find_one({'_id': auth_token['user']})
-            for item in user['accounts']:
-                if item['username'] == username:
-                    yield self.settings['db'].tokens.update({
-                        'key': auth_token['key']
-                    }, {
-                        '$set': {
-                            'session': item
-                        }
-                    })
-                    break
-            else:
-                self.write_error(
-                    HTTPStatus.BAD_REQUEST,
-                    message=self.default_errors['bad_account']
-                )
-            self.write({
-                'detail': 'Account successfully switched'
-            })
+            self.write_error(
+                HTTPStatus.BAD_REQUEST,
+                message=self.default_errors['bad_account']
+            )
+            return None
+        self.write({
+            'detail': 'Account successfully switched'
+        })
